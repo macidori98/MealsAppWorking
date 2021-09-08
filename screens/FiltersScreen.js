@@ -1,14 +1,66 @@
-import {TERMINATORLESS_TYPES} from '@babel/types';
-import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Switch,
+  Dimensions,
+  Platform,
+} from 'react-native';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
+import CustomText from '../components/CustomText';
+import FilterSwitch from '../components/FiltersSwitch';
 import CustomHeaderButton from '../components/HeaderButton';
+import Colors from '../constants/Colors';
 import Title from '../constants/Title';
 
 const FiltersScreen = props => {
+  const {navigation} = props;
+  const [isGlutenFree, setIsGlutenFree] = useState(false);
+  const [isLactoseFree, setIsLactoseFree] = useState(false);
+  const [isVegan, setIsVegan] = useState(false);
+  const [isVegeterian, setIsVegeterian] = useState(false);
+
+  const saveFilters = useCallback(() => {
+    const appliedFilters = {
+      glutenFree: isGlutenFree,
+      lactoseFree: isLactoseFree,
+      vegan: isVegan,
+      vegeterian: isVegeterian,
+    };
+
+    console.log(appliedFilters);
+  }, [isGlutenFree, isLactoseFree, isVegeterian, isVegan]);
+
+  useEffect(() => {
+    navigation.setParams({save: saveFilters});
+  }, [saveFilters]);
+
   return (
     <View style={styles.screen}>
-      <Text>The filters screen</Text>
+      <CustomText style={styles.title}>
+        Available Filter / Restrictions
+      </CustomText>
+      <FilterSwitch
+        label="Gluten-free"
+        state={isGlutenFree}
+        onChange={value => setIsGlutenFree(value)}
+      />
+      <FilterSwitch
+        label="Lactose-free"
+        state={isLactoseFree}
+        onChange={value => setIsLactoseFree(value)}
+      />
+      <FilterSwitch
+        label="Vegan"
+        state={isVegan}
+        onChange={value => setIsVegan(value)}
+      />
+      <FilterSwitch
+        label="Vegeterian"
+        state={isVegeterian}
+        onChange={value => setIsVegeterian(value)}
+      />
     </View>
   );
 };
@@ -27,14 +79,29 @@ FiltersScreen.navigationOptions = navData => {
         />
       </HeaderButtons>
     ),
+    headerRight: (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title="Save"
+          iconName="save-outline"
+          onPress={() => {
+            navData.navigation.getParam('save')();
+          }}
+        />
+      </HeaderButtons>
+    ),
   };
 };
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+  },
+  title: {
+    fontSize: 22,
+    textAlign: 'center',
+    margin: 20,
   },
 });
 
