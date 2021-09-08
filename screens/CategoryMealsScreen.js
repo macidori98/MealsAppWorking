@@ -1,6 +1,7 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import MealList from '../components/MealList';
-import {CATEGORIES, MEALS} from '../data/dummy-data';
+import {CATEGORIES} from '../data/dummy-data';
 import Category from '../models/category';
 import Meals from '../models/meal';
 
@@ -10,17 +11,28 @@ const CategoryMealsScreen = props => {
    */
   const categoryId = props.navigation.getParam('categoryId');
 
+  /**
+   * @type {Meals[]}
+   */
+  const availableMeals = useSelector(state => {
+    return state.meals.filteredMeals;
+  });
+
   return (
-    <MealList listData={getMeals(categoryId)} navigation={props.navigation} />
+    <MealList
+      listData={getMeals(availableMeals, categoryId)}
+      navigation={props.navigation}
+    />
   );
 };
 
 /**
+ * @param {Meals[]} meals
  * @param {string} categoryId
  * @returns {Meals[]}
  */
-const getMeals = categoryId => {
-  return MEALS.filter(meal => meal.categoryIds.includes(categoryId));
+const getMeals = (meals, categoryId) => {
+  return meals.filter(meal => meal.categoryIds.includes(categoryId));
 };
 
 CategoryMealsScreen.navigationOptions = navigationData => {

@@ -1,18 +1,9 @@
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
 import CategoryGridTile from '../components/CategoriGridTile';
-import CustomText from '../components/CustomText';
 import {CATEGORIES} from '../data/dummy-data';
 import Category from '../models/category';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
-import {Header} from 'react-native/Libraries/NewAppScreen';
 import CustomHeaderButton from '../components/HeaderButton';
 
 const CategoriesScreen = props => {
