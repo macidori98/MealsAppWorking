@@ -25,6 +25,7 @@ const defaultNavConfig = {
   headerBackTitleStyle: {
     fontFamily: 'OpenSans-Regular',
   },
+  headerBackTitle: '',
   headerTintColor:
     Platform.OS === 'android' ? Colors.white : Colors.primaryColor,
 };

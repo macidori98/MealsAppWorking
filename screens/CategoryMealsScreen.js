@@ -1,5 +1,7 @@
 import React from 'react';
+import {StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
+import CustomText from '../components/CustomText';
 import MealList from '../components/MealList';
 import {CATEGORIES} from '../data/dummy-data';
 import Category from '../models/category';
@@ -14,17 +16,32 @@ const CategoryMealsScreen = props => {
   /**
    * @type {Meals[]}
    */
-  const availableMeals = useSelector(state => {
-    return state.meals.filteredMeals;
-  });
-
-  return (
-    <MealList
-      listData={getMeals(availableMeals, categoryId)}
-      navigation={props.navigation}
-    />
+  const availableMeals = useSelector(
+    /**@param {{meals: import('../store/reducers/meals').StateObj}} state */ state => {
+      return state.meals.filteredMeals;
+    },
   );
+
+  const filteredMeals = getMeals(availableMeals, categoryId);
+
+  if (filteredMeals.length > 0) {
+    return <MealList listData={filteredMeals} navigation={props.navigation} />;
+  } else {
+    return (
+      <View style={styles.content}>
+        <CustomText>No meals found.</CustomText>
+      </View>
+    );
+  }
 };
+
+const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 /**
  * @param {Meals[]} meals
